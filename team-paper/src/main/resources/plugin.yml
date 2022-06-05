@@ -7,3 +7,7 @@ load: POSTWORLD
 authors: [ GigaClub ]
 depend: [ Translation ]
 website: https://github.com/GigaClub
+
+commands:
+  team:
+    description: /team

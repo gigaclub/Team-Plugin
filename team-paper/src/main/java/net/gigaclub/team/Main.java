@@ -1,5 +1,6 @@
 package net.gigaclub.team;
 
+import net.gigaclub.team.commands.TeamCommand;
 import net.gigaclub.teamapi.Team;
 import net.gigaclub.translation.Translation;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -7,6 +8,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.Objects;
 
 public final class Main extends JavaPlugin {
 
@@ -28,7 +30,7 @@ public final class Main extends JavaPlugin {
                 config.getString("Odoo.Username"),
                 config.getString("Odoo.Password")
         ));
-        translation.setCategory("team");
+        Main.translation.setCategory("team");
 
         setTeam(new Team(
                 config.getString("Odoo.Host"),
@@ -36,6 +38,8 @@ public final class Main extends JavaPlugin {
                 config.getString("Odoo.Username"),
                 config.getString("Odoo.Password")
         ));
+
+        this.registerCommands();
 
     }
 
@@ -66,6 +70,10 @@ public final class Main extends JavaPlugin {
 
     public static void setTeam(Team team) {
         Main.team = team;
+    }
+
+    public void registerCommands() {
+        Objects.requireNonNull(getCommand("team")).setExecutor(new TeamCommand());
     }
 
 }
