@@ -1,4 +1,4 @@
-package net.gigaclub.pluginname;
+package net.gigaclub.team;
 
 import org.bukkit.plugin.java.JavaPlugin;
 

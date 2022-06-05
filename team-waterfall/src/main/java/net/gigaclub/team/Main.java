@@ -1,4 +1,4 @@
-package net.gigaclub.pluginname;
+package net.gigaclub.team;
 
 import net.md_5.bungee.api.plugin.Plugin;
 
