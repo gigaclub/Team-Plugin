@@ -1,0 +1,8 @@
+name: Pluginname
+version: '${version}'
+main: net.gigaclub.pluginname.Main
+api-version: 1.18
+prefix: GigaClub
+load: POSTWORLD
+authors: [ GigaClub ]
+website: https://github.com/GigaClub

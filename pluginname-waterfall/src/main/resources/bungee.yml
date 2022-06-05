@@ -1,0 +1,3 @@
+name: Pluginname
+version: '${version}'
+main: net.gigaclub.pluginname.Main

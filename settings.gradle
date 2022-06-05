@@ -1,0 +1,3 @@
+rootProject.name = 'pluginname'
+
+include 'pluginname-common', 'pluginname-paper', 'pluginname-waterfall'
