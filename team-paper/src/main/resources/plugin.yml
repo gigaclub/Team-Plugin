@@ -2,7 +2,8 @@ name: Team
 version: '${version}'
 main: net.gigaclub.team.Main
 api-version: 1.18
-prefix: GigaClub
+prefix: Team
 load: POSTWORLD
 authors: [ GigaClub ]
+depend: [ Translation ]
 website: https://github.com/GigaClub

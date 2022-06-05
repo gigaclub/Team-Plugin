@@ -11,11 +11,28 @@ repositories {
         name = 'sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
+    maven {
+        name = "translationapi"
+        url = uri("https://maven.pkg.github.com/gigaclub/translationapi")
+        metadataSources {
+            mavenPom()
+            artifact()
+        }
+        credentials {
+            username = GITHUB_PACKAGES_USERID
+            password = GITHUB_PACKAGES_IMPORT_TOKEN
+        }
+    }
+    flatDir {
+        dirs '/home/kevin/Development/JavaAPI/TeamAPI/build/libs'
+    }
 }
 
 dependencies {
     api project(':team-common')
     compileOnly 'io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT'
+    api("net.gigaclub:translationapi:14.0.1.0.5")
+    api("net.gigaclub:teamapi:14.0.1.0.0")
 }
 
 processResources {
@@ -31,6 +48,7 @@ processResources {
 shadowJar {
     dependencies {
         include(dependency(':team-common'))
+        include(dependency("net.gigaclub:teamapi:14.0.1.0.0"))
     }
 }
 
