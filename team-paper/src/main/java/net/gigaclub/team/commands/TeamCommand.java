@@ -10,6 +10,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -27,13 +28,13 @@ public class TeamCommand implements CommandExecutor {
             Bukkit.getLogger().info("You´r not a Player  XD");
             return true;
         }
-        if (args.length <= 1) {
+        if (args.length < 1) {
             player.sendMessage(t.t("team.command.to_less_arguments", playerUUID));
             return true;
         }
         switch (args[0].toLowerCase()) {
             case "create":
-                if (args.length == 2) {
+                if (args.length <= 2) {
                     status = team.createTeam(playerUUID, args[1]);
                     switch (status) {
                         case 0 -> player.sendMessage(ChatColor.GREEN.toString() + t.t("team.command.create.success", playerUUID));
@@ -59,32 +60,25 @@ public class TeamCommand implements CommandExecutor {
                     player.sendMessage(ChatColor.RED.toString() + t.t("team.command.to_less_arguments", playerUUID));
                     break;
                 }
-                switch (args[0].toLowerCase()) {
+                switch (args[1].toLowerCase()) {
                     case "name" -> {
                         if (args.length == 3) {
                             player.sendMessage(ChatColor.RED.toString() + t.t("team.command.to_less_arguments", playerUUID));
                             break;
                         }
-                        status = team.editTeam(playerUUID, args[2], args[3]);
+                        status = team.editTeam(playerUUID, Integer.parseInt(args[2]), args[3]);
                         switch (status) {
-                            case 0 -> player.sendMessage(ChatColor.GREEN.toString() + t.t("team.command.edit.name", playerUUID));
-                            case 1 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.user_is_not_manager_of_this_team", playerUUID));
-                            case 2 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.user_is_not_member_of_this_team", playerUUID));
-                            case 3 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.team_does_not_exist", playerUUID));
-                            case 4 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.user_has_no_team", playerUUID));
-                            case 5 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.other_error", playerUUID));
+                            case 0 -> player.sendMessage(ChatColor.GREEN.toString() + t.t("team.command.edit.success", playerUUID));
+                            case 1 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.edit.no_valid_team_found_for_this_user", playerUUID));
+                            case 2 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.edit.other_error", playerUUID));
                         }
                     }
                     case "description" -> {
-                        String teamName = team.getTeam(args[2]).getString("name");
-                        status = team.editTeam(playerUUID, args[2], teamName, this.getDescription(args, 2));
+                        status = team.editTeam(playerUUID, Integer.parseInt(args[2]), "", this.getDescription(args, 2));
                         switch (status) {
-                            case 0 -> player.sendMessage(ChatColor.GREEN.toString() + t.t("team.command.edit.description", playerUUID));
-                            case 1 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.user_is_not_manager_of_this_team", playerUUID));
-                            case 2 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.user_is_not_member_of_this_team", playerUUID));
-                            case 3 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.team_does_not_exist", playerUUID));
-                            case 4 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.user_has_no_team", playerUUID));
-                            case 5 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.other_error", playerUUID));
+                            case 0 -> player.sendMessage(ChatColor.GREEN.toString() + t.t("team.command.edit.success", playerUUID));
+                            case 1 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.edit.no_valid_team_found_for_this_user", playerUUID));
+                            case 2 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.edit.other_error", playerUUID));
                         }
                     }
                 }
@@ -170,6 +164,27 @@ public class TeamCommand implements CommandExecutor {
             case "deny":
                 team.denyRequest(playerUUID, args[1]);
                 break;
+            case "list":
+                JSONArray teamList = team.getAllTeams();
+                for (int i = 0; i < teamList.length(); i++) {
+                    JSONObject teamObject = teamList.getJSONObject(i);
+                    int teamId = teamObject.getInt("id");
+                    String teamName = teamObject.getString("name");
+                    String teamDescription = teamObject.getString("description");
+                    String teamOwner = teamObject.getString("owner_id");
+                    JSONArray teamMembers = teamObject.getJSONArray("user_ids");
+                    // rework after translation rework
+                    sender.sendMessage(t.t("team.command.list.id", playerUUID) + ": " + teamId);
+                    sender.sendMessage(t.t("team.command.list.name", playerUUID) + ": " + teamName);
+                    sender.sendMessage(t.t("team.command.list.description", playerUUID) + ": " + teamDescription);
+                    sender.sendMessage(t.t("team.command.list.owner", playerUUID) + ": " + teamOwner);
+                    for (int j = 0; j < teamMembers.length(); j++) {
+                        JSONObject teamMember = teamMembers.getJSONObject(j);
+                        String teamMemberId = teamMember.getString("mc_uuid");
+                        sender.sendMessage(t.t("team.command.list.user", playerUUID) + ": " + teamMemberId);
+                    }
+                    sender.sendMessage("");
+                }
         }
         return true;
     }
