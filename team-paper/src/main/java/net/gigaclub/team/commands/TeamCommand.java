@@ -36,22 +36,22 @@ public class TeamCommand implements CommandExecutor {
                 if (args.length == 2) {
                     status = team.createTeam(playerUUID, args[1]);
                     switch (status) {
-                        case 0 -> player.sendMessage(ChatColor.GREEN.toString() + t.t("team.command.create.only_name", playerUUID));
+                        case 0 -> player.sendMessage(ChatColor.GREEN.toString() + t.t("team.command.create.success", playerUUID));
                         case 1 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.create.team_could_not_be_created", playerUUID));
-                        case 2 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.team_with_name_already_exists", playerUUID));
-                        case 3 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.player_can_only_create_one_team", playerUUID));
-                        case 4 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.other_error", playerUUID));
+                        case 2 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.create.team_with_this_name_already_exists", playerUUID));
+                        case 3 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.create.user_has_no_access_to_create_a_team", playerUUID));
+                        case 4 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.create.other_error", playerUUID));
                     }
                     break;
                 }
                 String description = this.getDescription(args, 2);
                 status = team.createTeam(playerUUID, args[1], description);
                 switch (status) {
-                    case 0 -> player.sendMessage(ChatColor.GREEN.toString() + t.t("team.command.Create.name_desc", playerUUID, Arrays.asList(description)));
+                    case 0 -> player.sendMessage(ChatColor.GREEN.toString() + t.t("team.command.create.success", playerUUID));
                     case 1 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.create.team_could_not_be_created", playerUUID));
-                    case 2 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.team_with_name_already_exists", playerUUID));
-                    case 3 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.player_can_only_create_one_team", playerUUID));
-                    case 4 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.other_error", playerUUID));
+                    case 2 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.create.team_with_this_name_already_exists", playerUUID));
+                    case 3 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.create.user_has_no_access_to_create_a_team", playerUUID));
+                    case 4 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.create.other_error", playerUUID));
                 }
                 break;
             case "edit":
