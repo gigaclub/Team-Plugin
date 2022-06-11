@@ -74,7 +74,7 @@ public class TeamCommand implements CommandExecutor {
                         }
                     }
                     case "description" -> {
-                        status = team.editTeam(playerUUID, Integer.parseInt(args[2]), "", this.getDescription(args, 2));
+                        status = team.editTeam(playerUUID, Integer.parseInt(args[2]), "", this.getDescription(args, 3));
                         switch (status) {
                             case 0 -> player.sendMessage(ChatColor.GREEN.toString() + t.t("team.command.edit.success", playerUUID));
                             case 1 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.edit.no_valid_team_found_for_this_user", playerUUID));
