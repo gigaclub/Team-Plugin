@@ -93,14 +93,16 @@ public class TeamCommand implements CommandExecutor {
                 }
                 break;
             case "kick":
-                String playerToKick = Objects.requireNonNull(Bukkit.getPlayer(args[1])).getUniqueId().toString();
-                status = team.kickMember(playerUUID, playerToKick);
+                int teamId = Integer.parseInt(args[1]);
+                String playerToKick = Objects.requireNonNull(Bukkit.getPlayer(args[2])).getUniqueId().toString();
+                status = team.kickMember(playerUUID, teamId, playerToKick);
                 switch (status) {
-                    case 0 -> player.sendMessage(ChatColor.GREEN.toString() + t.t("team.command.kick_user_success", playerUUID));
-                    case 1 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.user_is_not_user_of_this_team", playerUUID));
-                    case 2 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.user_is_not_manager", playerUUID));
-                    case 3 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.team_does_not_exist", playerUUID));
-                    case 4 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.other_error", playerUUID));
+                    case 0 -> player.sendMessage(ChatColor.GREEN.toString() + t.t("team.command.kick.success", playerUUID));
+                    case 1 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.kick.user_is_not_member_of_team", playerUUID));
+                    case 2 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.kick.not_allowed_to_kick_owner", playerUUID));
+                    case 3 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.kick.user_to_kick_does_not_exist", playerUUID));
+                    case 4 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.kick.no_valid_team_found_for_this_user", playerUUID));
+                    case 5 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.kick.other_error", playerUUID));
                 }
                 break;
             case "invite":
@@ -132,7 +134,7 @@ public class TeamCommand implements CommandExecutor {
                 JSONArray teamList = team.getAllTeams();
                 for (int i = 0; i < teamList.length(); i++) {
                     JSONObject teamObject = teamList.getJSONObject(i);
-                    int teamId = teamObject.getInt("id");
+                    teamId = teamObject.getInt("id");
                     String teamName = teamObject.getString("name");
                     String teamDescription = teamObject.getString("description");
                     String teamOwner = teamObject.getString("owner_id");
