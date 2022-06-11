@@ -103,43 +103,6 @@ public class TeamCommand implements CommandExecutor {
                     case 4 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.other_error", playerUUID));
                 }
                 break;
-            case "addmanager":
-                String playerToAddManager = Objects.requireNonNull(Bukkit.getPlayer(args[1])).getUniqueId().toString();
-                status = team.promoteMember(playerUUID, playerToAddManager);
-                switch (status) {
-                    case 0 -> player.sendMessage(ChatColor.GREEN.toString() + t.t("team.command.promoteMember_success", playerUUID));
-                    case 1 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.user_is_already_manager_of_this_team", playerUUID));
-                    case 2 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.user_to_promote_is_not_in_this_team", playerUUID));
-                    case 3 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.user_to_promote_is_not_a_team", playerUUID));
-                    case 4 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.user_is_not_manager", playerUUID));
-                    case 5 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.team_does_not_exist", playerUUID));
-                    case 6 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.other_error", playerUUID));
-                }
-                break;
-            case "removemanager":
-                String playerToRemoveManager = Objects.requireNonNull(Bukkit.getPlayer(args[1])).getUniqueId().toString();
-                status = team.demoteMember(playerUUID, playerToRemoveManager);
-                switch (status) {
-                    case 0 -> player.sendMessage(ChatColor.GREEN.toString() + t.t("team.command.demoteMember_success", playerUUID));
-                    case 1 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.user_is_not_a_manager_of_this_team", playerUUID));
-                    case 2 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.user_to_demoteMember_is_not_in_this_team", playerUUID));
-                    case 3 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.user_to_demoteMember_is_not_a_team", playerUUID));
-                    case 4 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.user_is_not_manager", playerUUID));
-                    case 5 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.team_does_not_exist", playerUUID));
-                    case 6 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.other_error", playerUUID));
-                }
-                break;
-            case "add":
-                String playerToAdd = Objects.requireNonNull(Bukkit.getPlayer(args[1])).getUniqueId().toString();
-                status = team.addMember(playerUUID, playerToAdd);
-                switch (status) {
-                    case 0 -> player.sendMessage(ChatColor.GREEN.toString() + t.t("team.command.add_success", playerUUID));
-                    case 1 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.user_is_not_user_of_this_team", playerUUID));
-                    case 2 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.user_is_not_manager", playerUUID));
-                    case 3 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.team_does_not_exist", playerUUID));
-                    case 4 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.other_error", playerUUID));
-                }
-                break;
             case "invite":
                 String receiverUUID = Objects.requireNonNull(Bukkit.getPlayer(args[1])).getUniqueId().toString();
                 if (Bukkit.getOfflinePlayer(receiverUUID) == null) {
