@@ -1,13 +1,12 @@
-package net.gigaclub.pluginname;
+package net.gigaclub.team;
 
-import org.bukkit.plugin.java.JavaPlugin;
+import net.md_5.bungee.api.plugin.Plugin;
 
-public final class Main extends JavaPlugin {
+public final class Main extends Plugin {
 
     @Override
     public void onEnable() {
         // Plugin startup logic
-
     }
 
     @Override
