@@ -106,32 +106,53 @@ public class TeamCommand implements CommandExecutor {
                 }
                 break;
             case "invite":
-                String receiverUUID = Objects.requireNonNull(Bukkit.getPlayer(args[1])).getUniqueId().toString();
-                if (Bukkit.getOfflinePlayer(receiverUUID) == null) {
-                    player.sendMessage(ChatColor.RED.toString() + args[2] + t.t("team.command.is_not_a_player", playerUUID));
+                teamId = Integer.parseInt(args[1]);
+                Player receiver = Bukkit.getPlayer(args[2]);
+                if (receiver == null) {
+                    player.sendMessage(ChatColor.RED.toString() + args[2] + t.t("team.command.invite.is_not_a_player", playerUUID));
                     break;
                 }
-                status = team.inviteMember(playerUUID, receiverUUID);
+                String receiverUUID = receiver.getUniqueId().toString();
+                status = team.inviteMember(playerUUID, teamId, receiverUUID);
                 switch (status) {
-                    case 0 -> player.sendMessage(ChatColor.GREEN.toString() + t.t("team.command.invite_success", playerUUID));
-                    case 1 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.user_is_already_manager_of_this_team", playerUUID));
-                    case 2 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.user_is_not_manager", playerUUID));
-                    case 3 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.team_does_not_exist", playerUUID));
+                    case 0 -> {
+                        player.sendMessage(ChatColor.GREEN.toString() + t.t("team.command.invite.success", playerUUID));
+                        JSONObject getTeam = team.getTeam(teamId);
+                        String teamname = getTeam.getString("name");
+                        player.sendMessage(ChatColor.AQUA + teamname + " " + "team.command.invite.sender" + " " + ChatColor.GREEN + receiver.getName());
+                        receiver.sendMessage(ChatColor.AQUA + "team.command.invite.receiver" + " " + ChatColor.GREEN + teamname);
+                    }
+                    case 1 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.invite.request_already_sent", playerUUID));
+                    case 2 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.invite.user_is_already_member_of_this_team", playerUUID));
+                    case 3 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.invite.user_to_invite_not_found", playerUUID));
+                    case 4 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.invite.no_valid_team_found_for_the_user", playerUUID));
+                    case 5 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.invite.other_error", playerUUID));
                 }
-                Player receiver = Bukkit.getPlayer(args[1]);
-                JSONObject getTeam = team.getTeamNameByMember(playerUUID);
-                String teamname = getTeam.getString("name");
-                player.sendMessage(ChatColor.AQUA + teamname + " " + "team.command.invite.sender" + " " + ChatColor.GREEN + receiver.getName());
-                receiver.sendMessage(ChatColor.AQUA + "team.command.invite.receiver" + " " + ChatColor.GREEN + teamname);
                 break;
             case "accept":
-                team.acceptRequest(playerUUID, args[1]);
+                teamId = Integer.parseInt(args[1]);
+                status = team.acceptRequest(playerUUID, teamId);
+                switch (status) {
+                    case 0 -> player.sendMessage(ChatColor.GREEN.toString() + t.t("team.command.accept.success", playerUUID));
+                    case 1 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.accept.request_does_not_exist", playerUUID));
+                    case 2 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.accept.team_does_not_exist", playerUUID));
+                    case 3 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.accept.user_has_no_permission_to_accept_requests", playerUUID));
+                    case 4 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.accept.other_error", playerUUID));
+                }
                 break;
             case "deny":
-                team.denyRequest(playerUUID, args[1]);
+                teamId = Integer.parseInt(args[1]);
+                status = team.denyRequest(playerUUID, teamId);
+                switch (status) {
+                    case 0 -> player.sendMessage(ChatColor.GREEN.toString() + t.t("team.command.deny.success", playerUUID));
+                    case 1 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.deny.request_does_not_exist", playerUUID));
+                    case 2 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.deny.team_does_not_exist", playerUUID));
+                    case 3 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.deny.user_has_no_permission_to_reject_requests", playerUUID));
+                    case 4 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.deny.other_error", playerUUID));
+                }
                 break;
             case "list":
-                JSONArray teamList = team.getAllTeams();
+                JSONArray teamList = team.getTeamsByMember(playerUUID);
                 for (int i = 0; i < teamList.length(); i++) {
                     JSONObject teamObject = teamList.getJSONObject(i);
                     teamId = teamObject.getInt("id");
