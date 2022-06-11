@@ -84,11 +84,12 @@ public class TeamCommand implements CommandExecutor {
                 }
                 break;
             case "leave":
-                status = team.leaveTeam(playerUUID);
+                status = team.leaveTeam(playerUUID, Integer.parseInt(args[1]));
                 switch (status) {
-                    case 0 -> player.sendMessage(ChatColor.GREEN.toString() + t.t("team.command.leave_Team_Success", playerUUID));
-                    case 1 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.User_has_no_team", playerUUID));
-                    case 2 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.other_error", playerUUID));
+                    case 0 -> player.sendMessage(ChatColor.GREEN.toString() + t.t("team.command.leave.success", playerUUID));
+                    case 1 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.leave.user_has_no_team", playerUUID));
+                    case 2 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.leave.user_has_no_permission_to_leave_teams", playerUUID));
+                    case 3 -> player.sendMessage(ChatColor.RED.toString() + t.t("team.command.leave.other_error", playerUUID));
                 }
                 break;
             case "kick":
