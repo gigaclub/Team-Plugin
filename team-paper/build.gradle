@@ -23,8 +23,17 @@ repositories {
             password = GITHUB_PACKAGES_IMPORT_TOKEN
         }
     }
-    flatDir {
-        dirs '/home/kevin/Development/JavaAPI/TeamAPI/build/libs'
+    maven {
+        name = "teamapi"
+        url = uri("https://maven.pkg.github.com/gigaclub/teamapi")
+        metadataSources {
+            mavenPom()
+            artifact()
+        }
+        credentials {
+            username = GITHUB_PACKAGES_USERID
+            password = GITHUB_PACKAGES_IMPORT_TOKEN
+        }
     }
 }
 
