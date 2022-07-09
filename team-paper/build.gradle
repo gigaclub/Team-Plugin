@@ -40,7 +40,7 @@ repositories {
 dependencies {
     api project(':team-common')
     compileOnly 'io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT'
-    api("net.gigaclub:translationapi:14.0.1.0.5")
+    api("net.gigaclub:translationapi:14.0.1.0.6")
     api("net.gigaclub:teamapi:14.0.1.0.0")
 }
 
